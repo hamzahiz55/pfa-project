@@ -16,7 +16,7 @@ spec:
       serviceAccountName: aws-s3-manager-sa
       containers:
       - name: aws-s3-manager
-        image: aws-s3-manager:v2.0.0-full-automation-test
+        image: aws-s3-manager:latest
         imagePullPolicy: Never  # Use local image
         ports:
         - containerPort: 3000
