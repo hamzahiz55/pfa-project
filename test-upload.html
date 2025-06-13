@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test File Upload</title>
+</head>
+<body>
+    <h1>Test File Upload</h1>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">Upload</button>
+    <div id="result"></div>
+
+    <script>
+    async function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        const resultDiv = document.getElementById('result');
+        
+        if (!file) {
+            resultDiv.innerHTML = 'Please select a file';
+            return;
+        }
+        
+        try {
+            // Convert file to base64
+            const arrayBuffer = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+            
+            const base64File = btoa(
+                new Uint8Array(arrayBuffer).reduce(
+                    (data, byte) => data + String.fromCharCode(byte),
+                    ''
+                )
+            );
+            
+            console.log('File converted to base64, length:', base64File.length);
+            console.log('File type:', typeof base64File);
+            
+            const response = await fetch('http://localhost:30080/api/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    bucket: 'test-bucket',
+                    key: file.name,
+                    file: base64File,
+                }),
+            });
+            
+            const result = await response.json();
+            console.log('Response:', result);
+            
+            if (response.ok) {
+                resultDiv.innerHTML = '<span style="color: green;">Upload successful!</span>';
+            } else {
+                resultDiv.innerHTML = '<span style="color: red;">Upload failed: ' + result.error + '</span>';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            resultDiv.innerHTML = '<span style="color: red;">Error: ' + error.message + '</span>';
+        }
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aws-s3-manager
+
+bases:
+  - ../../
+
+commonLabels:
+  environment: production
+
+resources:
+  - network-policy-patch.yaml
+  - rbac-patch.yaml
+  - storage-class-patch.yaml
+  - ../../postgres-backup-cronjob.yaml
+
+patchesStrategicMerge:
+  - app-service-patch.yaml
+  - hpa-patch.yaml
+  - |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: aws-s3-manager-app
+      namespace: aws-s3-manager
+    spec:
+      replicas: 3
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
+      template:
+        spec:
+          containers:
+          - name: aws-s3-manager
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "500m"
+              limits:
+                memory: "1Gi"
+                cpu: "1000m"
+
+  - |-
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: postgres-service
+      namespace: aws-s3-manager
+    spec:
+      type: ClusterIP
+      sessionAffinity: ClientIP
+
+  - |-
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      name: aws-s3-manager-pdb
+      namespace: aws-s3-manager
+    spec:
+      minAvailable: 2
+      selector:
+        matchLabels:
+          app: aws-s3-manager-app

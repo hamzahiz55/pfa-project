@@ -1,0 +1,46 @@
+# ArgoCD Installation and Setup
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+---
+# ArgoCD Installation via kubectl
+# kubectl create namespace argocd
+# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# ArgoCD Application for AWS S3 Manager
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-s3-manager
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/tahavv/aws-s3-manager.git
+    targetRevision: new-new-branch
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: aws-s3-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+# ArgoCD Server Service (NodePort for local access)
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-server-nodeport
+  namespace: argocd
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30080
+  selector:
+    app.kubernetes.io/name: argocd-server

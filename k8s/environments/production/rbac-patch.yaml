@@ -1,0 +1,51 @@
+# Production-specific RBAC restrictions
+# Remove ClusterRoleBinding in production if not needed
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aws-s3-manager-monitoring-binding
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: "disabled"
+subjects: []
+---
+# Additional production Role for CI/CD
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cicd-deployer-role
+  namespace: aws-s3-manager
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "create", "update", "patch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "create", "update", "patch"]
+---
+# ServiceAccount for CI/CD
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cicd-deployer-sa
+  namespace: aws-s3-manager
+---
+# RoleBinding for CI/CD
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cicd-deployer-rolebinding
+  namespace: aws-s3-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cicd-deployer-role
+subjects:
+- kind: ServiceAccount
+  name: cicd-deployer-sa
+  namespace: aws-s3-manager

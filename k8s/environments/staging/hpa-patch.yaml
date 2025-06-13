@@ -1,0 +1,23 @@
+# Staging-specific HPA configuration
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aws-s3-manager-hpa
+  namespace: aws-s3-manager
+spec:
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  # Less aggressive scaling for staging
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 85

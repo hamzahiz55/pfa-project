@@ -1,0 +1,35 @@
+# Production storage configuration
+# High-performance SSD with encryption and backups
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: postgres-production-storage
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io2  # High-performance SSD
+  iopsPerGB: "50"  # 50 IOPS per GB
+  fsType: ext4
+  encrypted: "true"
+  kmsKeyId: "alias/aws/ebs"  # Use AWS managed key
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+mountOptions:
+  - noatime
+  - nodiratime
+---
+# Update PVC to use production storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: aws-s3-manager
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: postgres-production-storage
+  resources:
+    requests:
+      storage: 100Gi  # Larger storage for production

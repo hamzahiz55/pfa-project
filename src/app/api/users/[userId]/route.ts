@@ -1,0 +1,62 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { Pool } from 'pg';
+import { validateEnv } from '@/utils/validateEnv';
+import { deleteFile } from '@/lib/aws/delete';
+
+// Initialize environment validation
+try {
+  validateEnv();
+} catch (error: any) {
+  console.error('Environment validation failed:', error.message);
+  process.exit(1);
+}
+
+// Initialize PostgreSQL client with same logic as main route
+let connectionString = process.env.DATABASE_URL;
+if (connectionString && connectionString.includes('@db:')) {
+  connectionString = connectionString.replace('@db:', '@localhost:').replace(':5432/', ':5555/');
+} else if (!connectionString) {
+  const host = process.env.DB_HOST || 'localhost';
+  const port = process.env.DB_PORT || '5555';
+  const user = process.env.DB_USER || 'postgres';
+  const password = process.env.DB_PASSWORD || 'postgres123';
+  const database = process.env.DB_NAME || 'aws_s3_manager';
+  connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+}
+
+const pool = new Pool({
+  connectionString: connectionString,
+});
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  try {
+    const { userId } = await params;
+    const userIdInt = parseInt(userId, 10);
+    if (isNaN(userIdInt)) {
+      return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
+    }
+    // Get user's photo URL before deletion
+    const userResult = await pool.query('SELECT photo_url FROM users WHERE id = $1', [userIdInt]);
+
+    if (userResult.rows.length === 0) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    const photoUrl = userResult.rows[0].photo_url;
+    const photoKey = photoUrl.split('.amazonaws.com/')[1];
+
+    // Delete photo from S3 using shared logic
+    //await deleteFile(process.env.NEXT_PUBLIC_S3_BUCKET_NAME!, photoKey);
+
+    // Delete user from database
+    await pool.query('DELETE FROM users WHERE id = $1', [userIdInt]);
+
+    return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 });
+  }
+}

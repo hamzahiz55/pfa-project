@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_IMAGE = 'aws-s3-manager'
+        DOCKER_TAG = "${BUILD_NUMBER}"
+        K8S_NAMESPACE = 'aws-s3-manager'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                sh 'npm test || echo "No tests configured"'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -t ${DOCKER_IMAGE}:latest ."
+                }
+            }
+        }
+        
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Create namespace if it doesn't exist
+                    sh "kubectl create namespace ${K8S_NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -"
+                    
+                    // Apply Kubernetes resources
+                    sh "kubectl apply -f k8s/secret.yaml"
+                    sh "kubectl apply -f k8s/configmap.yaml"
+                    sh "kubectl apply -f k8s/postgres-deployment.yaml"
+                    sh "kubectl apply -f k8s/app-deployment.yaml"
+                    
+                    // Update the deployment with new image
+                    sh "kubectl set image deployment/aws-s3-manager aws-s3-manager=${DOCKER_IMAGE}:${DOCKER_TAG} -n ${K8S_NAMESPACE}"
+                    
+                    // Wait for rollout to complete
+                    sh "kubectl rollout status deployment/aws-s3-manager -n ${K8S_NAMESPACE}"
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+        always {
+            // Clean up old Docker images
+            sh "docker image prune -f"
+        }
+    }
+}

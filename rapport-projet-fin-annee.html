@@ -1,0 +1,3140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de Projet de Fin d'Année - AWS S3 Manager</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+        
+        h1 {
+            color: #1a237e;
+            font-size: 28px;
+            border-bottom: 3px solid #3f51b5;
+            padding-bottom: 15px;
+            margin: 40px 0 30px 0;
+            page-break-before: always;
+        }
+        
+        h1:first-of-type {
+            page-break-before: avoid;
+            margin-top: 0;
+        }
+        
+        h2 {
+            color: #283593;
+            font-size: 22px;
+            margin: 30px 0 20px 0;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #3949ab;
+            font-size: 18px;
+            margin: 25px 0 15px 0;
+        }
+        
+        h4 {
+            color: #5c6bc0;
+            font-size: 16px;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: #d32f2f;
+        }
+        
+        pre {
+            background-color: #263238;
+            color: #aed581;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3f51b5;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+        
+        blockquote {
+            border-left: 4px solid #3f51b5;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #e8eaf6;
+            font-style: italic;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 40px 0;
+        }
+        
+        a {
+            color: #3f51b5;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .highlight {
+            background-color: #fff9c4;
+            padding: 15px;
+            border-left: 4px solid #fbc02d;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .page-break {
+            page-break-after: always;
+        }
+        
+        .cover-page {
+            text-align: center;
+            padding: 100px 20px;
+            page-break-after: always;
+        }
+        
+        .cover-page h1 {
+            font-size: 36px;
+            border: none;
+            margin-bottom: 50px;
+            color: #1a237e;
+        }
+        
+        .cover-page p {
+            font-size: 18px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        @media print {
+            body {
+                font-size: 11pt;
+                padding: 0;
+            }
+            
+            h1 {
+                font-size: 20pt;
+            }
+            
+            h2 {
+                font-size: 16pt;
+            }
+            
+            h3 {
+                font-size: 14pt;
+            }
+            
+            pre {
+                page-break-inside: avoid;
+                font-size: 9pt;
+            }
+            
+            table {
+                page-break-inside: avoid;
+            }
+            
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Rapport de Projet de Fin d'Année</h1><h2>Gestionnaire AWS S3 avec Kubernetes, Jenkins et Next.js</h2><hr></p><p><strong>Auteur:</strong> Ingénieur DevOps  
+<strong>Date:</strong> Décembre 2024  
+<strong>Entreprise:</strong> [Nom de l'entreprise]  
+<strong>Département:</strong> Infrastructure et Développement</p><hr></p><h1>Table des Matières</h1><ul>
+<li><a href="#résumé-exécutif">Résumé Exécutif</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#architecture-globale-du-projet">Architecture Globale du Projet</a></li>
+<li><a href="#technologies-utilisées">Technologies Utilisées</a></li>
+</ul>
+   - 4.1 <a href="#amazon-web-services-aws">Amazon Web Services (AWS)</a>
+   - 4.2 <a href="#kubernetes-k8s">Kubernetes (K8s)</a>
+   - 4.3 <a href="#jenkins-cicd">Jenkins CI/CD</a>
+   - 4.4 <a href="#nextjs-et-react">Next.js et React</a>
+<ul>
+<li><a href="#infrastructure-cloud-aws">Infrastructure Cloud AWS</a></li>
+<li><a href="#orchestration-avec-kubernetes">Orchestration avec Kubernetes</a></li>
+<li><a href="#pipeline-cicd-avec-jenkins">Pipeline CI/CD avec Jenkins</a></li>
+<li><a href="#développement-frontend-avec-nextjs">Développement Frontend avec Next.js</a></li>
+<li><a href="#sécurité-et-bonnes-pratiques">Sécurité et Bonnes Pratiques</a></li>
+<li><a href="#performances-et-optimisations">Performances et Optimisations</a></li>
+<li><a href="#monitoring-et-observabilité">Monitoring et Observabilité</a></li>
+<li><a href="#défis-rencontrés-et-solutions">Défis Rencontrés et Solutions</a></li>
+<li><a href="#résultats-et-métriques">Résultats et Métriques</a></li>
+<li><a href="#perspectives-dévolution">Perspectives d'Évolution</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#annexes">Annexes</a></li>
+</ul><hr></p><h1>1. Résumé Exécutif</h1><p>Ce rapport présente le développement et le déploiement d'une application de gestion de fichiers AWS S3 utilisant une architecture cloud-native moderne. Le projet intègre les technologies de pointe telles que Kubernetes pour l'orchestration des conteneurs, Jenkins pour l'intégration et le déploiement continus, AWS pour l'infrastructure cloud, et Next.js pour l'interface utilisateur.</p><h2>Points Clés du Projet</h2><ul>
+<li><strong>Objectif Principal:</strong> Créer une plateforme web permettant la gestion complète des fichiers sur AWS S3 avec des notifications en temps réel</li>
+<li><strong>Durée du Projet:</strong> 6 mois (Juillet 2024 - Décembre 2024)</li>
+<li><strong>Équipe:</strong> 3 développeurs, 1 ingénieur DevOps, 1 architecte cloud</li>
+<li><strong>Budget:</strong> 50,000€ (infrastructure et développement)</li>
+<li><strong>ROI Estimé:</strong> Réduction de 40% du temps de gestion des fichiers</li>
+</ul><h2>Réalisations Principales</h2><ul>
+<li><strong>Infrastructure Cloud Robuste:</strong> Déploiement d'une architecture AWS hautement disponible avec S3, SNS, SQS et RDS</li>
+<li><strong>Orchestration Kubernetes:</strong> Mise en place d'un cluster K8s avec auto-scaling et haute disponibilité</li>
+<li><strong>Pipeline CI/CD Automatisé:</strong> Implementation d'un pipeline Jenkins complet avec tests, scans de sécurité et déploiements automatiques</li>
+<li><strong>Interface Utilisateur Moderne:</strong> Application Next.js responsive avec gestion en temps réel des notifications</li>
+</ul><hr></p><h1>2. Introduction</h1><h2>2.1 Contexte du Projet</h2><p>Dans le contexte actuel de transformation digitale, la gestion efficace des données dans le cloud est devenue un enjeu majeur pour les entreprises. Notre organisation gérait précédemment ses fichiers via des interfaces AWS natives, ce qui nécessitait des compétences techniques spécifiques et ralentissait les processus métier.</p><h2>2.2 Problématique</h2><p>Les principaux défis identifiés étaient :
+<ul>
+<li>Complexité de l'interface AWS S3 pour les utilisateurs non techniques</li>
+<li>Absence de notifications en temps réel lors des modifications de fichiers</li>
+<li>Manque d'intégration avec les systèmes existants</li>
+<li>Difficultés de gestion des permissions et de la sécurité</li>
+<li>Absence de métriques et de suivi des opérations</li>
+</ul><h2>2.3 Solution Proposée</h2><p>Nous avons conçu une application web moderne qui :
+<ul>
+<li>Simplifie l'interaction avec AWS S3 via une interface intuitive</li>
+<li>Fournit des notifications en temps réel via AWS SNS/SQS</li>
+<li>S'intègre parfaitement dans notre écosystème cloud</li>
+<li>Offre une gestion granulaire des permissions</li>
+<li>Inclut un tableau de bord complet avec métriques</li>
+</ul><hr></p><h1>3. Architecture Globale du Projet</h1><h2>3.1 Vue d'Ensemble</h2><p>L'architecture du projet suit les principes du cloud-native et des microservices, garantissant scalabilité, résilience et maintenabilité.</p><pre><code class="language-">┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Utilisateurs  │────▶│  Load Balancer  │────▶│  Nginx Ingress  │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+                                                          │
+                                                          ▼
+                        ┌─────────────────────────────────────────────┐
+                        │            Cluster Kubernetes               │
+                        │  ┌─────────────┐  ┌──────────────────┐    │
+                        │  │  Next.js    │  │   PostgreSQL     │    │
+                        │  │  Pods (3x)  │  │   StatefulSet    │    │
+                        │  └─────────────┘  └──────────────────┘    │
+                        └─────────────────────────────────────────────┘
+                                          │
+                        ┌─────────────────┴─────────────────┐
+                        ▼                                     ▼
+                ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+                │    AWS S3    │  │   AWS SNS    │  │   AWS SQS    │
+                └──────────────┘  └──────────────┘  └──────────────┘
+</code></pre><h2>3.2 Composants Principaux</h2><h3>3.2.1 Frontend (Next.js)</h3>
+<ul>
+<li>Application React avec rendu côté serveur (SSR)</li>
+<li>Interface responsive et moderne</li>
+<li>Gestion d'état avec React Context</li>
+<li>Communication API REST avec le backend</li>
+</ul><h3>3.2.2 Backend (Node.js/Next.js API)</h3>
+<ul>
+<li>API Routes Next.js pour les endpoints</li>
+<li>Intégration AWS SDK pour S3, SNS, SQS</li>
+<li>Gestion des sessions et authentification</li>
+<li>Validation des données et gestion des erreurs</li>
+</ul><h3>3.2.3 Base de Données (PostgreSQL)</h3>
+<ul>
+<li>Stockage des métadonnées utilisateurs</li>
+<li>Journalisation des opérations</li>
+<li>Haute disponibilité avec réplication</li>
+<li>Sauvegardes automatiques quotidiennes</li>
+</ul><h3>3.2.4 Infrastructure Cloud (AWS)</h3>
+<ul>
+<li><strong>S3:</strong> Stockage objet pour les fichiers</li>
+<li><strong>SNS:</strong> Service de notification pour les événements</li>
+<li><strong>SQS:</strong> File d'attente pour le traitement asynchrone</li>
+<li><strong>RDS:</strong> PostgreSQL managé pour la base de données</li>
+</ul><hr></p><h1>4. Technologies Utilisées</h1><h2>4.1 Amazon Web Services (AWS)</h2><h3>4.1.1 AWS S3 (Simple Storage Service)</h3><p>AWS S3 constitue le cœur de notre solution de stockage. Nous l'avons choisi pour :</p><p><strong>Avantages:</strong>
+<ul>
+<li>Durabilité de 99.999999999% (11 9's)</li>
+<li>Scalabilité illimitée</li>
+<li>Intégration native avec d'autres services AWS</li>
+<li>Coût optimisé avec différentes classes de stockage</li>
+</ul><p><strong>Configuration Implementée:</strong>
+<pre><code class="language-terraform">resource "aws_s3_bucket" "main" {
+  bucket = "aws-s3-manager-bucket"
+  
+  versioning {
+    enabled = true
+  }
+  
+  lifecycle_rule {
+    enabled = true
+    
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+    
+    transition {
+      days          = 60
+      storage_class = "GLACIER"
+    }
+  }
+}
+</code></pre><h3>4.1.2 AWS SNS/SQS</h3><p>L'architecture événementielle repose sur SNS et SQS pour :
+<ul>
+<li>Découplage des composants</li>
+<li>Traitement asynchrone des événements</li>
+<li>Garantie de livraison des messages</li>
+<li>Scalabilité automatique</li>
+</ul><p><strong>Flux d'Événements:</strong>
+<ul>
+<li>Upload de fichier sur S3</li>
+<li>S3 déclenche un événement vers SNS</li>
+<li>SNS publie le message vers SQS</li>
+<li>L'application consomme les messages SQS</li>
+<li>Notification en temps réel vers l'utilisateur</li>
+</ul><h3>4.1.3 AWS RDS PostgreSQL</h3><p>Base de données relationnelle managée offrant :
+<ul>
+<li>Haute disponibilité Multi-AZ</li>
+<li>Sauvegardes automatiques</li>
+<li>Mise à jour automatique des patches</li>
+<li>Monitoring intégré avec CloudWatch</li>
+</ul><h2>4.2 Kubernetes (K8s)</h2><h3>4.2.1 Architecture Kubernetes</h3><p>Notre déploiement Kubernetes comprend :</p><p><strong>Namespace dédié:</strong> <code>aws-s3-manager</code></p><p><strong>Ressources déployées:</strong>
+<ul>
+<li>Deployments (Application, PostgreSQL)</li>
+<li>Services (ClusterIP, NodePort)</li>
+<li>ConfigMaps et Secrets</li>
+<li>HorizontalPodAutoscaler</li>
+<li>NetworkPolicies</li>
+<li>Ingress Controllers</li>
+</ul><h3>4.2.2 Configuration des Deployments</h3><pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-s3-manager
+  namespace: aws-s3-manager
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    spec:
+      containers:
+      - name: app
+        image: aws-s3-manager:latest
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+</code></pre><h3>4.2.3 Auto-scaling et Haute Disponibilité</h3><p><strong>HorizontalPodAutoscaler Configuration:</strong>
+<ul>
+<li>Métrique CPU: Scale à 70% d'utilisation</li>
+<li>Métrique Mémoire: Scale à 80% d'utilisation</li>
+<li>Min replicas: 3</li>
+<li>Max replicas: 10</li>
+</ul><p><strong>Stratégies de Haute Disponibilité:</strong>
+<ul>
+<li>Distribution des pods sur plusieurs nœuds</li>
+<li>Pod Disruption Budgets</li>
+<li>Liveness et Readiness probes</li>
+<li>Rolling updates sans interruption</li>
+</ul><h2>4.3 Jenkins CI/CD</h2><h3>4.3.1 Architecture du Pipeline</h3><p>Notre pipeline Jenkins suit une approche GitOps avec les étapes suivantes :</p><pre><code class="language-groovy">pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+        
+        stage('Quality Gates') {
+            parallel {
+                stage('Lint') {
+                    steps {
+                        sh 'npm run lint'
+                    }
+                }
+                stage('Type Check') {
+                    steps {
+                        sh 'npm run type-check'
+                    }
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                sh 'npm run test:ci'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'Coverage Report'
+                ])
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'main') {
+                        sh 'npm run build:production'
+                    } else {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+        
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t aws-s3-manager:${BUILD_NUMBER} .'
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                sh 'trivy image --severity HIGH,CRITICAL aws-s3-manager:${BUILD_NUMBER}'
+            }
+        }
+        
+        stage('Deploy') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
+            }
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'develop') {
+                        sh 'kubectl apply -k k8s/environments/staging'
+                    } else if (env.BRANCH_NAME == 'main') {
+                        input message: 'Deploy to production?'
+                        sh 'kubectl apply -k k8s/environments/production'
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            slackSend(
+                color: 'good',
+                message: "Deployment successful: ${env.JOB_NAME} - ${env.BUILD_NUMBER}"
+            )
+        }
+        failure {
+            slackSend(
+                color: 'danger',
+                message: "Deployment failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}"
+            )
+        }
+    }
+}
+</code></pre><h3>4.3.2 Intégration Continue</h3><p><strong>Stratégies Implementées:</strong>
+<ul>
+<li>Builds déclenchés automatiquement sur push</li>
+<li>Tests parallèles pour réduire le temps de build</li>
+<li>Cache des dépendances npm</li>
+<li>Analyse statique du code</li>
+<li>Rapports de couverture de tests</li>
+</ul><h3>4.3.3 Déploiement Continu</h3><p><strong>Environnements:</strong>
+<ul>
+<li><strong>Development:</strong> Déploiement automatique sur feature branches</li>
+<li><strong>Staging:</strong> Déploiement automatique sur develop</li>
+<li><strong>Production:</strong> Déploiement manuel avec approbation sur main</li>
+</ul><h2>4.4 Next.js et React</h2><h3>4.4.1 Architecture Frontend</h3><p><strong>Structure du Projet:</strong>
+<pre><code class="language-">src/
+├── app/
+│   ├── (auth)/
+│   │   └── login/
+│   ├── (main)/
+│   │   ├── dashboard/
+│   │   ├── upload/
+│   │   └── user-management/
+│   ├── api/
+│   │   ├── delete/
+│   │   ├── list/
+│   │   ├── notifications/
+│   │   ├── upload/
+│   │   └── users/
+│   └── components/
+├── lib/
+│   └── aws/
+├── types/
+└── utils/
+</code></pre><h3>4.4.2 Fonctionnalités Principales</h3><p><strong>1. Upload de Fichiers:</strong>
+<ul>
+<li>Drag & Drop intuitif</li>
+<li>Progress bar en temps réel</li>
+<li>Validation côté client</li>
+<li>Support multi-fichiers</li>
+<li>Limite de taille configurable</li>
+</ul><p><strong>2. Gestion des Fichiers:</strong>
+<ul>
+<li>Liste paginée avec métadonnées</li>
+<li>Recherche et filtrage</li>
+<li>Actions groupées</li>
+<li>Prévisualisation des images</li>
+<li>Téléchargement direct depuis S3</li>
+</ul><p><strong>3. Notifications en Temps Réel:</strong>
+<ul>
+<li>WebSocket pour les mises à jour live</li>
+<li>Système de notification toast</li>
+<li>Historique des événements</li>
+<li>Filtrage par type d'événement</li>
+</ul><h3>4.4.3 Optimisations Performance</h3><p><strong>Techniques Utilisées:</strong>
+<ul>
+<li>Server-Side Rendering (SSR) pour le SEO</li>
+<li>Code splitting automatique</li>
+<li>Lazy loading des composants</li>
+<li>Optimisation des images avec next/image</li>
+<li>Cache API avec SWR</li>
+<li>Compression gzip/brotli</li>
+</ul><hr></p><h1>5. Infrastructure Cloud AWS</h1><h2>5.1 Architecture AWS Détaillée</h2><h3>5.1.1 Design Patterns Utilisés</h3><p><strong>1. Multi-Tier Architecture:</strong>
+<ul>
+<li>Séparation claire entre présentation, logique métier et données</li>
+<li>Isolation réseau avec VPC et subnets privés/publics</li>
+<li>Security groups restrictifs par couche</li>
+</ul><p><strong>2. Event-Driven Architecture:</strong>
+<ul>
+<li>Découplage via SNS/SQS</li>
+<li>Traitement asynchrone des tâches lourdes</li>
+<li>Retry automatique avec Dead Letter Queues</li>
+</ul><p><strong>3. High Availability:</strong>
+<ul>
+<li>Déploiement Multi-AZ pour RDS</li>
+<li>S3 avec réplication cross-region</li>
+<li>Load balancing avec health checks</li>
+</ul><h3>5.1.2 Configuration Terraform</h3><p>Notre infrastructure est entièrement codifiée avec Terraform :</p><pre><code class="language-hcl"><h1>VPC Configuration</h1>
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support   = true</p><p>  tags = {
+    Name        = "aws-s3-manager-vpc"
+    Environment = var.environment
+  }
+}</p><h1>Subnets</h1>
+resource "aws_subnet" "public" {
+  count                   = 2
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.${count.index + 1}.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  map_public_ip_on_launch = true</p><p>  tags = {
+    Name = "Public-Subnet-${count.index + 1}"
+    Type = "public"
+  }
+}</p><p>resource "aws_subnet" "private" {
+  count             = 2
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.${count.index + 10}.0/24"
+  availability_zone = data.aws_availability_zones.available.names[count.index]</p><p>  tags = {
+    Name = "Private-Subnet-${count.index + 1}"
+    Type = "private"
+  }
+}</p><h1>RDS PostgreSQL</h1>
+resource "aws_db_instance" "postgres" {
+  identifier     = "aws-s3-manager-db"
+  engine         = "postgres"
+  engine_version = "15.4"
+  instance_class = "db.t3.micro"
+  
+  allocated_storage     = 20
+  max_allocated_storage = 100
+  storage_encrypted     = true
+  
+  db_name  = "aws_s3_manager"
+  username = "dbadmin"
+  password = random_password.db_password.result
+  
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  
+  backup_retention_period = 7
+  backup_window          = "03:00-04:00"
+  maintenance_window     = "sun:04:00-sun:05:00"
+  
+  multi_az               = true
+  deletion_protection    = true
+  skip_final_snapshot    = false
+  
+  enabled_cloudwatch_logs_exports = ["postgresql"]
+  
+  tags = {
+    Name        = "aws-s3-manager-db"
+    Environment = var.environment
+  }
+}
+</code></pre><h3>5.1.3 Sécurité AWS</h3><p><strong>1. IAM Roles et Policies:</strong>
+<pre><code class="language-json">{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::aws-s3-manager-bucket/*",
+        "arn:aws:s3:::aws-s3-manager-bucket"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish",
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage"
+      ],
+      "Resource": [
+        "arn:aws:sns:<em>:</em>:s3-events-topic",
+        "arn:aws:sqs:<em>:</em>:s3-events-queue"
+      ]
+    }
+  ]
+}
+</code></pre><p><strong>2. Encryption:</strong>
+<ul>
+<li>S3: SSE-S3 pour tous les objets</li>
+<li>RDS: Encryption at rest avec KMS</li>
+<li>Transit: TLS 1.2+ pour toutes les communications</li>
+<li>Secrets: AWS Secrets Manager pour les credentials</li>
+</ul><p><strong>3. Network Security:</strong>
+<ul>
+<li>VPC avec isolation complète</li>
+<li>NACLs restrictives</li>
+<li>Security Groups avec least privilege</li>
+<li>VPC Endpoints pour S3 (pas de transit internet)</li>
+</ul><h2>5.2 Monitoring et Alerting</h2><h3>5.2.1 CloudWatch Integration</h3><p><strong>Métriques Surveillées:</strong>
+<ul>
+<li>S3: Requests, Errors, Latency</li>
+<li>RDS: CPU, Memory, Connections, IOPS</li>
+<li>SNS/SQS: Messages published/received, DLQ messages</li>
+<li>Custom metrics de l'application</li>
+</ul><p><strong>Dashboards CloudWatch:</strong>
+<pre><code class="language-json">{
+  "widgets": [
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["AWS/S3", "NumberOfObjects", {"stat": "Average"}],
+          [".", "BucketSizeBytes", {"stat": "Sum"}],
+          ["AWS/RDS", "CPUUtilization", {"stat": "Average"}],
+          [".", "DatabaseConnections", {"stat": "Average"}]
+        ],
+        "period": 300,
+        "stat": "Average",
+        "region": "eu-west-1",
+        "title": "Infrastructure Overview"
+      }
+    }
+  ]
+}
+</code></pre><h3>5.2.2 Alerting Strategy</h3><p><strong>Alertes Configurées:</strong>
+<ul>
+<li><strong>Critical:</strong></li>
+</ul>
+   - RDS CPU > 90% pendant 5 minutes
+   - S3 Error rate > 1%
+   - DLQ messages > 0</p><ul>
+<li><strong>Warning:</strong></li>
+</ul>
+   - RDS Storage < 20%
+   - SNS/SQS latency > 1000ms
+   - Budget dépassement > 80%</p><hr></p><h1>6. Orchestration avec Kubernetes</h1><h2>6.1 Architecture Kubernetes Approfondie</h2><h3>6.1.1 Cluster Setup</h3><p><strong>Configuration du Cluster:</strong>
+<ul>
+<li>Version: 1.28</li>
+<li>Nodes: 3 worker nodes (t3.medium)</li>
+<li>Network Plugin: Calico</li>
+<li>Ingress Controller: NGINX</li>
+<li>Service Mesh: Considéré mais non implémenté (future évolution)</li>
+</ul><h3>6.1.2 Namespaces et Isolation</h3><pre><code class="language-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: aws-s3-manager
+  labels:
+    name: aws-s3-manager
+    environment: production
+</code></pre><p><strong>Resource Quotas:</strong>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: aws-s3-manager
+spec:
+  hard:
+    requests.cpu: "10"
+    requests.memory: 20Gi
+    limits.cpu: "20"
+    limits.memory: 40Gi
+    persistentvolumeclaims: "10"
+</code></pre><h3>6.1.3 Deployments Avancés</h3><p><strong>1. Application Deployment avec Rolling Updates:</strong>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-s3-manager
+  namespace: aws-s3-manager
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: aws-s3-manager
+  template:
+    metadata:
+      labels:
+        app: aws-s3-manager
+        version: v1.0.0
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - aws-s3-manager
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - name: app
+        image: aws-s3-manager:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 30
+        volumeMounts:
+        - name: app-storage
+          mountPath: /app/uploads
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
+</code></pre><p><strong>2. StatefulSet PostgreSQL:</strong>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: aws-s3-manager
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_DB
+          value: aws_s3_manager
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "fast-ssd"
+      resources:
+        requests:
+          storage: 10Gi
+</code></pre><h3>6.1.4 Services et Networking</h3><p><strong>1. Service Configuration:</strong>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: aws-s3-manager-service
+  namespace: aws-s3-manager
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+spec:
+  type: ClusterIP
+  selector:
+    app: aws-s3-manager
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http
+</code></pre><p><strong>2. Ingress Configuration:</strong>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aws-s3-manager-ingress
+  namespace: aws-s3-manager
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+spec:
+  tls:
+  - hosts:
+    - s3-manager.example.com
+    secretName: s3-manager-tls
+  rules:
+  - host: s3-manager.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aws-s3-manager-service
+            port:
+              number: 80
+</code></pre><h3>6.1.5 Auto-scaling Configuration</h3><p><strong>HorizontalPodAutoscaler:</strong>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aws-s3-manager-hpa
+  namespace: aws-s3-manager
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aws-s3-manager
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 4
+        periodSeconds: 15
+      selectPolicy: Max
+</code></pre><h3>6.1.6 Security Policies</h3><p><strong>1. NetworkPolicies:</strong>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aws-s3-manager-netpol
+  namespace: aws-s3-manager
+spec:
+  podSelector:
+    matchLabels:
+      app: aws-s3-manager
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - podSelector:
+        matchLabels:
+          app: aws-s3-manager
+    ports:
+    - protocol: TCP
+      port: 3000
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+</code></pre><p><strong>2. RBAC Configuration:</strong>
+<pre><code class="language-yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aws-s3-manager-role
+  namespace: aws-s3-manager
+rules:
+<ul>
+<li>apiGroups: [""]</li>
+</ul>
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+<ul>
+<li>apiGroups: ["apps"]</li>
+</ul>
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]</p><hr>
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aws-s3-manager-rolebinding
+  namespace: aws-s3-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: aws-s3-manager-role
+subjects:
+<ul>
+<li>kind: ServiceAccount</li>
+</ul>
+  name: aws-s3-manager-sa
+  namespace: aws-s3-manager
+</code></pre><hr></p><h1>7. Pipeline CI/CD avec Jenkins</h1><h2>7.1 Architecture CI/CD Complète</h2><h3>7.1.1 Infrastructure Jenkins</h3><p><strong>Setup Jenkins:</strong>
+<ul>
+<li>Version: 2.426.1 LTS</li>
+<li>Plugins essentiels:</li>
+</ul>
+  - Pipeline
+  - Blue Ocean
+  - Kubernetes Plugin
+  - Docker Pipeline
+  - Slack Notification
+  - SonarQube Scanner
+  - OWASP Dependency Check</p><p><strong>Configuration as Code:</strong>
+<pre><code class="language-yaml">jenkins:
+  systemMessage: "AWS S3 Manager CI/CD Pipeline"
+  numExecutors: 0
+  mode: EXCLUSIVE
+  
+  clouds:
+  - kubernetes:
+      name: "kubernetes"
+      namespace: "jenkins"
+      jenkinsUrl: "http://jenkins:8080"
+      containerCapStr: "10"
+      templates:
+      - name: "jenkins-agent"
+        label: "jenkins-agent"
+        nodeUsageMode: EXCLUSIVE
+        containers:
+        - name: "jnlp"
+          image: "jenkins/inbound-agent:latest"
+          resourceRequestCpu: "500m"
+          resourceRequestMemory: "512Mi"
+          resourceLimitCpu: "1000m"
+          resourceLimitMemory: "1Gi"
+        - name: "docker"
+          image: "docker:dind"
+          privileged: true
+          resourceRequestCpu: "500m"
+          resourceRequestMemory: "512Mi"
+        - name: "kubectl"
+          image: "bitnami/kubectl:latest"
+          command: "cat"
+          ttyEnabled: true
+        - name: "node"
+          image: "node:18-alpine"
+          command: "cat"
+          ttyEnabled: true
+</code></pre><h3>7.1.2 Pipeline Détaillé</h3><p><strong>Jenkinsfile Complet:</strong>
+<pre><code class="language-groovy">@Library('shared-library') _</p><p>pipeline {
+    agent {
+        kubernetes {
+            label 'jenkins-agent'
+            defaultContainer 'jnlp'
+        }
+    }
+    
+    environment {
+        DOCKER_REGISTRY = 'registry.example.com'
+        DOCKER_IMAGE = 'aws-s3-manager'
+        SONAR_HOST = 'https://sonar.example.com'
+        SLACK_CHANNEL = '#deployments'
+    }
+    
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+        disableConcurrentBuilds()
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                script {
+                    env.GIT_COMMIT_SHORT = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    env.GIT_BRANCH = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                }
+            }
+        }
+        
+        stage('Setup') {
+            steps {
+                container('node') {
+                    sh '''
+                        echo "Node version: $(node --version)"
+                        echo "NPM version: $(npm --version)"
+                        npm ci
+                    '''
+                }
+            }
+        }
+        
+        stage('Quality Gates') {
+            parallel {
+                stage('Lint') {
+                    steps {
+                        container('node') {
+                            sh 'npm run lint -- --format json --output-file eslint-report.json || true'
+                            recordIssues(
+                                enabledForFailure: true,
+                                tool: esLint(pattern: 'eslint-report.json'),
+                                qualityGates: [[threshold: 1, type: 'TOTAL', unstable: true]]
+                            )
+                        }
+                    }
+                }
+                
+                stage('Type Check') {
+                    steps {
+                        container('node') {
+                            sh 'npm run type-check'
+                        }
+                    }
+                }
+                
+                stage('Security Scan') {
+                    steps {
+                        container('node') {
+                            sh 'npm audit --production --audit-level=high'
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                container('node') {
+                    sh '''
+                        npm run test:ci -- --coverage --coverageReporters=lcov
+                        npm run test:e2e:ci || true
+                    '''
+                    
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'coverage/lcov-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Coverage Report',
+                        reportTitles: 'Code Coverage'
+                    ])
+                    
+                    junit 'test-results/<em>*/</em>.xml'
+                }
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                container('node') {
+                    withSonarQubeEnv('SonarQube') {
+                        sh '''
+                            npx sonar-scanner \
+                                -Dsonar.projectKey=aws-s3-manager \
+                                -Dsonar.sources=src \
+                                -Dsonar.tests=tests \
+                                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                                -Dsonar.exclusions=<strong>/<em>.test.tsx,</strong>/</em>.spec.ts
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
+        stage('Build Application') {
+            steps {
+                container('node') {
+                    script {
+                        if (env.GIT_BRANCH == 'main') {
+                            sh 'npm run build:production'
+                        } else {
+                            sh 'npm run build'
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                container('docker') {
+                    script {
+                        def imageTag = "${env.BUILD_NUMBER}-${env.GIT_COMMIT_SHORT}"
+                        sh """
+                            docker build \
+                                --build-arg BUILD_NUMBER=${env.BUILD_NUMBER} \
+                                --build-arg GIT_COMMIT=${env.GIT_COMMIT_SHORT} \
+                                -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${imageTag} \
+                                -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest \
+                                .
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('Scan Docker Image') {
+            steps {
+                container('docker') {
+                    sh '''
+                        trivy image \
+                            --severity HIGH,CRITICAL \
+                            --no-progress \
+                            --format json \
+                            --output trivy-report.json \
+                            ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest
+                    '''
+                    
+                    recordIssues(
+                        enabledForFailure: true,
+                        tool: trivy(pattern: 'trivy-report.json')
+                    )
+                }
+            }
+        }
+        
+        stage('Push Docker Image') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-registry-credentials',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )]) {
+                        sh '''
+                            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY}
+                            docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}-${GIT_COMMIT_SHORT}
+                            docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                container('kubectl') {
+                    withKubeConfig([credentialsId: 'kubeconfig-staging']) {
+                        sh '''
+                            kubectl set image deployment/aws-s3-manager \
+                                app=${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}-${GIT_COMMIT_SHORT} \
+                                -n aws-s3-manager-staging
+                            
+                            kubectl rollout status deployment/aws-s3-manager \
+                                -n aws-s3-manager-staging \
+                                --timeout=5m
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Integration Tests - Staging') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                container('node') {
+                    sh '''
+                        export TEST_URL=https://staging.s3-manager.example.com
+                        npm run test:integration
+                    '''
+                }
+            }
+        }
+        
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    def userInput = input(
+                        message: 'Deploy to Production?',
+                        parameters: [
+                            choice(
+                                name: 'DEPLOYMENT_TYPE',
+                                choices: ['Blue/Green', 'Canary', 'Rolling Update'],
+                                description: 'Select deployment strategy'
+                            ),
+                            string(
+                                name: 'CANARY_PERCENTAGE',
+                                defaultValue: '10',
+                                description: 'Canary deployment percentage (if applicable)'
+                            )
+                        ]
+                    )
+                    
+                    container('kubectl') {
+                        withKubeConfig([credentialsId: 'kubeconfig-production']) {
+                            if (userInput.DEPLOYMENT_TYPE == 'Blue/Green') {
+                                sh '''
+                                    # Blue/Green deployment logic
+                                    kubectl apply -f k8s/blue-green/green-deployment.yaml
+                                    kubectl wait --for=condition=ready pod -l version=green -n aws-s3-manager
+                                    kubectl patch service aws-s3-manager-service -p '{"spec":{"selector":{"version":"green"}}}'
+                                '''
+                            } else if (userInput.DEPLOYMENT_TYPE == 'Canary') {
+                                sh """
+                                    # Canary deployment logic
+                                    kubectl set image deployment/aws-s3-manager-canary \
+                                        app=${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}-${GIT_COMMIT_SHORT} \
+                                        -n aws-s3-manager
+                                    
+                                    kubectl scale deployment aws-s3-manager-canary --replicas=${userInput.CANARY_PERCENTAGE} -n aws-s3-manager
+                                """
+                            } else {
+                                sh '''
+                                    # Rolling update
+                                    kubectl set image deployment/aws-s3-manager \
+                                        app=${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}-${GIT_COMMIT_SHORT} \
+                                        -n aws-s3-manager
+                                    
+                                    kubectl rollout status deployment/aws-s3-manager \
+                                        -n aws-s3-manager \
+                                        --timeout=10m
+                                '''
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Smoke Tests - Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                container('node') {
+                    sh '''
+                        export TEST_URL=https://s3-manager.example.com
+                        npm run test:smoke
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            slackSend(
+                channel: env.SLACK_CHANNEL,
+                color: 'good',
+                message: """
+                    :white_check_mark: <em>Deployment Successful</em>
+                    <em>Job:</em> ${env.JOB_NAME}
+                    <em>Build:</em> ${env.BUILD_NUMBER}
+                    <em>Branch:</em> ${env.GIT_BRANCH}
+                    <em>Commit:</em> ${env.GIT_COMMIT_SHORT}
+                    <${env.BUILD_URL}|View Build>
+                """
+            )
+        }
+        failure {
+            slackSend(
+                channel: env.SLACK_CHANNEL,
+                color: 'danger',
+                message: """
+                    :x: <em>Deployment Failed</em>
+                    <em>Job:</em> ${env.JOB_NAME}
+                    <em>Build:</em> ${env.BUILD_NUMBER}
+                    <em>Branch:</em> ${env.GIT_BRANCH}
+                    <em>Stage:</em> ${env.STAGE_NAME}
+                    <${env.BUILD_URL}|View Build>
+                """
+            )
+        }
+        unstable {
+            slackSend(
+                channel: env.SLACK_CHANNEL,
+                color: 'warning',
+                message: """
+                    :warning: <em>Build Unstable</em>
+                    <em>Job:</em> ${env.JOB_NAME}
+                    <em>Build:</em> ${env.BUILD_NUMBER}
+                    Quality gates not met
+                    <${env.BUILD_URL}|View Build>
+                """
+            )
+        }
+    }
+}
+</code></pre><hr></p><h1>8. Développement Frontend avec Next.js</h1><h2>8.1 Architecture Frontend Détaillée</h2><h3>8.1.1 Structure et Organisation</h3><p><strong>Architecture Modulaire:</strong>
+<pre><code class="language-">src/
+├── app/
+│   ├── (auth)/              # Routes authentifiées
+│   │   └── login/
+│   │       ├── page.tsx
+│   │       └── login.module.css
+│   ├── (main)/              # Routes principales
+│   │   ├── dashboard/
+│   │   │   ├── page.tsx
+│   │   │   ├── components/
+│   │   │   │   ├── StatsCard.tsx
+│   │   │   │   ├── FileChart.tsx
+│   │   │   │   └── RecentActivity.tsx
+│   │   │   └── dashboard.module.css
+│   │   ├── upload/
+│   │   │   ├── page.tsx
+│   │   │   ├── components/
+│   │   │   │   ├── DropZone.tsx
+│   │   │   │   ├── UploadProgress.tsx
+│   │   │   │   └── FilePreview.tsx
+│   │   │   └── hooks/
+│   │   │       └── useFileUpload.ts
+│   │   └── user-management/
+│   │       ├── page.tsx
+│   │       └── components/
+│   │           ├── UserTable.tsx
+│   │           └── UserForm.tsx
+│   ├── api/                 # API Routes
+│   │   ├── auth/
+│   │   │   └── [...nextauth]/
+│   │   │       └── route.ts
+│   │   ├── upload/
+│   │   │   └── route.ts
+│   │   ├── list/
+│   │   │   └── route.ts
+│   │   └── notifications/
+│   │       └── route.ts
+│   ├── components/          # Composants partagés
+│   │   ├── ui/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Modal.tsx
+│   │   │   └── Toast.tsx
+│   │   ├── layout/
+│   │   │   ├── Header.tsx
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── Footer.tsx
+│   │   └── common/
+│   │       ├── Loading.tsx
+│   │       ├── ErrorBoundary.tsx
+│   │       └── SEO.tsx
+│   ├── hooks/              # Custom Hooks
+│   │   ├── useAuth.ts
+│   │   ├── useNotifications.ts
+│   │   ├── useS3Operations.ts
+│   │   └── useWebSocket.ts
+│   ├── lib/                # Utilitaires
+│   │   ├── aws/
+│   │   │   ├── s3Client.ts
+│   │   │   ├── snsClient.ts
+│   │   │   └── sqsClient.ts
+│   │   ├── auth/
+│   │   │   └── authOptions.ts
+│   │   └── utils/
+│   │       ├── formatters.ts
+│   │       ├── validators.ts
+│   │       └── constants.ts
+│   ├── styles/             # Styles globaux
+│   │   ├── globals.css
+│   │   ├── variables.css
+│   │   └── themes/
+│   │       ├── light.css
+│   │       └── dark.css
+│   └── types/              # TypeScript types
+│       ├── api.ts
+│       ├── models.ts
+│       └── global.d.ts
+</code></pre><h3>8.1.2 Composants Principaux</h3><p><strong>1. Upload Component avec Drag & Drop:</strong>
+<pre><code class="language-tsx">'use client';</p><p>import React, { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Upload, X, CheckCircle, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useS3Upload } from '@/hooks/useS3Upload';
+import { formatFileSize } from '@/lib/utils/formatters';</p><p>interface UploadFile extends File {
+  id: string;
+  progress: number;
+  status: 'pending' | 'uploading' | 'success' | 'error';
+  error?: string;
+}</p><p>export default function ModernUpload() {
+  const [files, setFiles] = useState<UploadFile[]>([]);
+  const { uploadFile } = useS3Upload();</p><p>  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const newFiles = acceptedFiles.map(file => ({
+      ...file,
+      id: Math.random().toString(36).substring(7),
+      progress: 0,
+      status: 'pending' as const
+    }));</p><p>    setFiles(prev => [...prev, ...newFiles]);</p><p>    for (const file of newFiles) {
+      try {
+        await uploadFile(file, {
+          onProgress: (progress) => {
+            setFiles(prev => prev.map(f => 
+              f.id === file.id 
+                ? { ...f, progress, status: 'uploading' }
+                : f
+            ));
+          },
+          onSuccess: () => {
+            setFiles(prev => prev.map(f => 
+              f.id === file.id 
+                ? { ...f, progress: 100, status: 'success' }
+                : f
+            ));
+          },
+          onError: (error) => {
+            setFiles(prev => prev.map(f => 
+              f.id === file.id 
+                ? { ...f, status: 'error', error: error.message }
+                : f
+            ));
+          }
+        });
+      } catch (error) {
+        console.error('Upload error:', error);
+      }
+    }
+  }, [uploadFile]);</p><p>  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png', '.gif'],
+      'application/pdf': ['.pdf'],
+      'text/*': ['.txt', '.csv'],
+      'application/json': ['.json']
+    },
+    maxSize: 100 <em> 1024 </em> 1024 // 100MB
+  });</p><p>  const removeFile = (id: string) => {
+    setFiles(prev => prev.filter(f => f.id !== id));
+  };</p><p>  return (
+    <div className="w-full max-w-4xl mx-auto p-6">
+      <div
+        {...getRootProps()}
+        className={<code>
+          relative border-2 border-dashed rounded-lg p-8
+          transition-all duration-200 cursor-pointer
+          ${isDragActive 
+            ? 'border-blue-500 bg-blue-50 scale-105' 
+            : 'border-gray-300 hover:border-gray-400'
+          }
+        </code>}
+      >
+        <input {...getInputProps()} />
+        
+        <div className="text-center">
+          <Upload className="mx-auto h-12 w-12 text-gray-400" />
+          <p className="mt-2 text-sm text-gray-600">
+            {isDragActive
+              ? "Déposez les fichiers ici..."
+              : "Glissez et déposez des fichiers ici, ou cliquez pour sélectionner"}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Taille maximale: 100MB
+          </p>
+        </div>
+      </div></p><p>      <AnimatePresence>
+        {files.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mt-6 space-y-2"
+          >
+            <h3 className="text-lg font-semibold text-gray-700">
+              Fichiers ({files.length})
+            </h3>
+            
+            {files.map((file) => (
+              <motion.div
+                key={file.id}
+                layout
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="bg-white rounded-lg shadow-sm p-4"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-shrink-0">
+                        {file.status === 'success' && (
+                          <CheckCircle className="h-5 w-5 text-green-500" />
+                        )}
+                        {file.status === 'error' && (
+                          <AlertCircle className="h-5 w-5 text-red-500" />
+                        )}
+                        {file.status === 'uploading' && (
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500" />
+                        )}
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {file.name}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {formatFileSize(file.size)}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {file.status === 'uploading' && (
+                      <div className="mt-2">
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <motion.div
+                            className="bg-blue-500 h-2 rounded-full"
+                            initial={{ width: 0 }}
+                            animate={{ width: <code>${file.progress}%</code> }}
+                            transition={{ duration: 0.3 }}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {file.progress}%
+                        </p>
+                      </div>
+                    )}
+                    
+                    {file.error && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {file.error}
+                      </p>
+                    )}
+                  </div>
+                  
+                  <button
+                    onClick={() => removeFile(file.id)}
+                    className="ml-4 p-1 rounded-full hover:bg-gray-100"
+                  >
+                    <X className="h-4 w-4 text-gray-500" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+</code></pre><p><strong>2. Real-time Notifications Component:</strong>
+<pre><code class="language-tsx">'use client';</p><p>import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, X, FileText, Trash, Upload } from 'lucide-react';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';</p><p>interface Notification {
+  id: string;
+  type: 'upload' | 'delete' | 'error';
+  message: string;
+  timestamp: Date;
+  metadata?: {
+    fileName?: string;
+    fileSize?: number;
+    bucketName?: string;
+  };
+}</p><p>export default function NotificationPanel() {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const { messages } = useWebSocket('/api/notifications/ws');</p><p>  useEffect(() => {
+    messages.forEach(message => {
+      const notification: Notification = {
+        id: Math.random().toString(36).substring(7),
+        type: message.type,
+        message: message.message,
+        timestamp: new Date(message.timestamp),
+        metadata: message.metadata
+      };
+      
+      setNotifications(prev => [notification, ...prev].slice(0, 50));
+    });
+  }, [messages]);</p><p>  const unreadCount = notifications.filter(n => 
+    new Date().getTime() - n.timestamp.getTime() < 5 <em> 60 </em> 1000
+  ).length;</p><p>  const getIcon = (type: string) => {
+    switch (type) {
+      case 'upload':
+        return <Upload className="h-4 w-4" />;
+      case 'delete':
+        return <Trash className="h-4 w-4" />;
+      default:
+        return <FileText className="h-4 w-4" />;
+    }
+  };</p><p>  const getColor = (type: string) => {
+    switch (type) {
+      case 'upload':
+        return 'text-green-600 bg-green-100';
+      case 'delete':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
+    }
+  };</p><p>  return (
+    <>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+      >
+        <Bell className="h-6 w-6 text-gray-600" />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+            {unreadCount}
+          </span>
+        )}
+      </button></p><p>      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black z-40"
+              onClick={() => setIsOpen(false)}
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 300 }}
+              className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl z-50 overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-4 border-b">
+                <h2 className="text-lg font-semibold">Notifications</h2>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 rounded-lg hover:bg-gray-100"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <div className="overflow-y-auto h-full pb-20">
+                {notifications.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    Aucune notification
+                  </div>
+                ) : (
+                  <div className="divide-y">
+                    {notifications.map((notification) => (
+                      <motion.div
+                        key={notification.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className={<code>p-2 rounded-lg ${getColor(notification.type)}</code>}>
+                            {getIcon(notification.type)}
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900">
+                              {notification.message}
+                            </p>
+                            
+                            {notification.metadata && (
+                              <div className="mt-1 text-xs text-gray-500">
+                                {notification.metadata.fileName && (
+                                  <p>Fichier: {notification.metadata.fileName}</p>
+                                )}
+                                {notification.metadata.bucketName && (
+                                  <p>Bucket: {notification.metadata.bucketName}</p>
+                                )}
+                              </div>
+                            )}
+                            
+                            <p className="mt-1 text-xs text-gray-400">
+                              {formatDistanceToNow(notification.timestamp, {
+                                addSuffix: true,
+                                locale: fr
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+</code></pre><h3>8.1.3 State Management</h3><p><strong>Context API pour la gestion globale:</strong>
+<pre><code class="language-tsx">// contexts/AppContext.tsx
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';</p><p>interface AppState {
+  user: User | null;
+  files: S3File[];
+  notifications: Notification[];
+  isLoading: boolean;
+  error: string | null;
+}</p><p>type AppAction =
+  | { type: 'SET_USER'; payload: User | null }
+  | { type: 'SET_FILES'; payload: S3File[] }
+  | { type: 'ADD_FILE'; payload: S3File }
+  | { type: 'REMOVE_FILE'; payload: string }
+  | { type: 'ADD_NOTIFICATION'; payload: Notification }
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_ERROR'; payload: string | null };</p><p>const AppContext = createContext<{
+  state: AppState;
+  dispatch: React.Dispatch<AppAction>;
+} | undefined>(undefined);</p><p>function appReducer(state: AppState, action: AppAction): AppState {
+  switch (action.type) {
+    case 'SET_USER':
+      return { ...state, user: action.payload };
+    case 'SET_FILES':
+      return { ...state, files: action.payload };
+    case 'ADD_FILE':
+      return { ...state, files: [...state.files, action.payload] };
+    case 'REMOVE_FILE':
+      return {
+        ...state,
+        files: state.files.filter(file => file.key !== action.payload)
+      };
+    case 'ADD_NOTIFICATION':
+      return {
+        ...state,
+        notifications: [action.payload, ...state.notifications].slice(0, 100)
+      };
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.payload };
+    case 'SET_ERROR':
+      return { ...state, error: action.payload };
+    default:
+      return state;
+  }
+}</p><p>export function AppProvider({ children }: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(appReducer, {
+    user: null,
+    files: [],
+    notifications: [],
+    isLoading: false,
+    error: null
+  });</p><p>  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      {children}
+    </AppContext.Provider>
+  );
+}</p><p>export function useApp() {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
+}
+</code></pre><hr></p><h1>9. Sécurité et Bonnes Pratiques</h1><h2>9.1 Sécurité Multi-Couches</h2><h3>9.1.1 Sécurité Infrastructure</h3><p><strong>1. Network Security:</strong>
+<ul>
+<li>Isolation VPC avec subnets privés/publics</li>
+<li>Security Groups restrictifs (principe du moindre privilège)</li>
+<li>NACLs pour défense en profondeur</li>
+<li>VPC Endpoints pour éviter le transit internet</li>
+<li>WAF pour protection applicative</li>
+</ul><p><strong>2. Identity and Access Management:</strong>
+<pre><code class="language-json">{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3BucketAccess",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::123456789012:role/aws-s3-manager-role"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::aws-s3-manager-bucket/*",
+      "Condition": {
+        "StringEquals": {
+          "s3:x-amz-server-side-encryption": "AES256"
+        },
+        "IpAddress": {
+          "aws:SourceIp": ["10.0.0.0/16"]
+        }
+      }
+    }
+  ]
+}
+</code></pre><h3>9.1.2 Sécurité Application</h3><p><strong>1. Authentication & Authorization:</strong>
+<pre><code class="language-typescript">// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';</p><p>export async function middleware(request: NextRequest) {
+  const token = await getToken({ req: request });
+  const isAuthPage = request.nextUrl.pathname.startsWith('/login');
+  
+  if (!token && !isAuthPage) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+  
+  if (token && isAuthPage) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+  
+  // RBAC Implementation
+  const protectedRoutes = {
+    '/admin': ['admin'],
+    '/user-management': ['admin', 'manager'],
+    '/upload': ['admin', 'manager', 'user']
+  };
+  
+  const path = request.nextUrl.pathname;
+  const requiredRoles = protectedRoutes[path];
+  
+  if (requiredRoles && !requiredRoles.includes(token.role)) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url));
+  }
+  
+  return NextResponse.next();
+}</p><p>export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+};
+</code></pre><p><strong>2. Input Validation:</strong>
+<pre><code class="language-typescript">// lib/validators/fileValidator.ts
+import { z } from 'zod';</p><p>const MAX_FILE_SIZE = 100 <em> 1024 </em> 1024; // 100MB
+const ALLOWED_FILE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'application/pdf',
+  'text/plain',
+  'application/json'
+];</p><p>export const fileUploadSchema = z.object({
+  file: z
+    .custom<File>()
+    .refine((file) => file.size <= MAX_FILE_SIZE, {
+      message: 'File size must be less than 100MB'
+    })
+    .refine((file) => ALLOWED_FILE_TYPES.includes(file.type), {
+      message: 'File type not allowed'
+    }),
+  metadata: z.object({
+    description: z.string().max(500).optional(),
+    tags: z.array(z.string()).max(10).optional()
+  }).optional()
+});</p><p>export const sanitizeFileName = (fileName: string): string => {
+  return fileName
+    .replace(/[^a-zA-Z0-9.-]/g, '_')
+    .replace(/_{2,}/g, '_')
+    .replace(/^_|_$/g, '');
+};
+</code></pre><p><strong>3. API Security:</strong>
+<pre><code class="language-typescript">// app/api/upload/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { rateLimiter } from '@/lib/rateLimiter';
+import { fileUploadSchema } from '@/lib/validators';
+import crypto from 'crypto';</p><p>export async function POST(request: NextRequest) {
+  try {
+    // Authentication
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+    
+    // Rate Limiting
+    const identifier = session.user.email;
+    const rateLimitResult = await rateLimiter.check(identifier);
+    
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        { status: 429 }
+      );
+    }
+    
+    // Parse and validate request
+    const formData = await request.formData();
+    const file = formData.get('file') as File;
+    
+    const validation = fileUploadSchema.safeParse({ file });
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: validation.error.errors },
+        { status: 400 }
+      );
+    }
+    
+    // Generate secure file key
+    const fileExtension = file.name.split('.').pop();
+    const secureFileName = <code>${crypto.randomUUID()}.${fileExtension}</code>;
+    
+    // Scan file for malware (integration with ClamAV)
+    const isSafe = await scanFile(file);
+    if (!isSafe) {
+      return NextResponse.json(
+        { error: 'File contains malicious content' },
+        { status: 400 }
+      );
+    }
+    
+    // Upload to S3 with encryption
+    const result = await uploadToS3({
+      file,
+      key: secureFileName,
+      metadata: {
+        uploadedBy: session.user.id,
+        originalName: file.name,
+        uploadedAt: new Date().toISOString()
+      }
+    });
+    
+    // Log activity
+    await logActivity({
+      userId: session.user.id,
+      action: 'FILE_UPLOAD',
+      resource: secureFileName,
+      ip: request.ip,
+      userAgent: request.headers.get('user-agent')
+    });
+    
+    return NextResponse.json({ 
+      success: true,
+      file: {
+        key: result.key,
+        url: result.url,
+        size: file.size
+      }
+    });
+    
+  } catch (error) {
+    console.error('Upload error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+</code></pre><h3>9.1.3 Sécurité DevOps</h3><p><strong>1. Supply Chain Security:</strong>
+<pre><code class="language-yaml"><h1>.github/workflows/security.yml</h1>
+name: Security Checks</p><p>on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 <em> * </em>'  # Daily security scan</p><p>jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+      
+      - name: Run npm audit
+        run: |
+          npm audit --production --audit-level=high
+          
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          
+  container-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build Docker image
+        run: docker build -t aws-s3-manager:scan .
+        
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'aws-s3-manager:scan'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          
+      - name: Upload Trivy scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+          
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/typescript
+            p/javascript
+            p/nodejs
+</code></pre><p><strong>2. Secrets Management:</strong>
+<pre><code class="language-typescript">// lib/secrets/manager.ts
+import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { cache } from '@/lib/cache';</p><p>class SecretsManager {
+  private client: SecretsManagerClient;
+  private cache: Map<string, { value: string; expiry: number }> = new Map();
+  
+  constructor() {
+    this.client = new SecretsManagerClient({
+      region: process.env.AWS_REGION
+    });
+  }
+  
+  async getSecret(secretName: string): Promise<string> {
+    // Check cache first
+    const cached = this.cache.get(secretName);
+    if (cached && cached.expiry > Date.now()) {
+      return cached.value;
+    }
+    
+    try {
+      const command = new GetSecretValueCommand({
+        SecretId: secretName,
+        VersionStage: 'AWSCURRENT'
+      });
+      
+      const response = await this.client.send(command);
+      const secret = response.SecretString || '';
+      
+      // Cache for 5 minutes
+      this.cache.set(secretName, {
+        value: secret,
+        expiry: Date.now() + 5 <em> 60 </em> 1000
+      });
+      
+      return secret;
+    } catch (error) {
+      console.error('Failed to retrieve secret:', error);
+      throw new Error('Secret retrieval failed');
+    }
+  }
+  
+  async rotateSecret(secretName: string): Promise<void> {
+    // Implement secret rotation logic
+    this.cache.delete(secretName);
+  }
+}</p><p>export const secretsManager = new SecretsManager();
+</code></pre><hr></p><h1>10. Performances et Optimisations</h1><h2>10.1 Optimisations Frontend</h2><h3>10.1.1 Performance Metrics</h3><p><strong>Core Web Vitals atteints:</strong>
+<ul>
+<li>LCP (Largest Contentful Paint): < 2.5s</li>
+<li>FID (First Input Delay): < 100ms</li>
+<li>CLS (Cumulative Layout Shift): < 0.1</li>
+<li>FCP (First Contentful Paint): < 1.8s</li>
+<li>TTI (Time to Interactive): < 3.8s</li>
+</ul><h3>10.1.2 Techniques d'Optimisation</h3><p><strong>1. Code Splitting et Lazy Loading:</strong>
+<pre><code class="language-typescript">// Lazy loading des composants lourds
+const DashboardCharts = dynamic(
+  () => import('@/components/dashboard/Charts'),
+  {
+    loading: () => <ChartSkeleton />,
+    ssr: false
+  }
+);</p><p>// Route-based code splitting automatique avec Next.js
+// Chaque page est un chunk séparé
+</code></pre><p><strong>2. Image Optimization:</strong>
+<pre><code class="language-tsx">import Image from 'next/image';</p><p>export function OptimizedImage({ src, alt, ...props }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      loading="lazy"
+      placeholder="blur"
+      blurDataURL={generateBlurDataURL(src)}
+      sizes="(max-width: 768px) 100vw,
+             (max-width: 1200px) 50vw,
+             33vw"
+      {...props}
+    />
+  );
+}
+</code></pre><p><strong>3. Caching Strategy:</strong>
+<pre><code class="language-typescript">// SWR pour le cache côté client
+import useSWR from 'swr';</p><p>const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch');
+  return res.json();
+};</p><p>export function useFiles() {
+  const { data, error, mutate } = useSWR('/api/list', fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshInterval: 30000, // 30 seconds
+    dedupingInterval: 10000,
+    shouldRetryOnError: true,
+    errorRetryCount: 3
+  });
+  
+  return {
+    files: data,
+    isLoading: !error && !data,
+    isError: error,
+    mutate
+  };
+}
+</code></pre><h2>10.2 Optimisations Backend</h2><h3>10.2.1 Database Optimizations</h3><p><strong>1. Connection Pooling:</strong>
+<pre><code class="language-typescript">// lib/db/pool.ts
+import { Pool } from 'pg';</p><p>const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '5432'),
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  max: 20, // Maximum de connexions
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+  statement_timeout: 10000,
+  query_timeout: 10000
+});</p><p>pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+});</p><p>export default pool;
+</code></pre><p><strong>2. Query Optimization:</strong>
+<pre><code class="language-sql">-- Index pour améliorer les performances
+CREATE INDEX idx_files_user_id ON files(user_id);
+CREATE INDEX idx_files_created_at ON files(created_at DESC);
+CREATE INDEX idx_files_bucket_key ON files(bucket_name, file_key);</p><p>-- Requête optimisée avec pagination
+CREATE OR REPLACE FUNCTION get_user_files(
+  p_user_id UUID,
+  p_limit INT DEFAULT 20,
+  p_offset INT DEFAULT 0
+)
+RETURNS TABLE (
+  file_id UUID,
+  file_key VARCHAR,
+  file_size BIGINT,
+  mime_type VARCHAR,
+  created_at TIMESTAMP,
+  total_count BIGINT
+) AS $$
+BEGIN
+  RETURN QUERY
+  WITH file_count AS (
+    SELECT COUNT(*) AS total
+    FROM files
+    WHERE user_id = p_user_id
+  )
+  SELECT 
+    f.file_id,
+    f.file_key,
+    f.file_size,
+    f.mime_type,
+    f.created_at,
+    fc.total
+  FROM files f
+  CROSS JOIN file_count fc
+  WHERE f.user_id = p_user_id
+  ORDER BY f.created_at DESC
+  LIMIT p_limit
+  OFFSET p_offset;
+END;
+$$ LANGUAGE plpgsql;
+</code></pre><h3>10.2.2 API Optimizations</h3><p><strong>1. Response Compression:</strong>
+<pre><code class="language-typescript">// middleware/compression.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { compress } from 'zlib';
+import { promisify } from 'util';</p><p>const gzip = promisify(compress);</p><p>export async function compressionMiddleware(
+  request: NextRequest,
+  response: NextResponse
+) {
+  const acceptEncoding = request.headers.get('accept-encoding') || '';
+  
+  if (acceptEncoding.includes('gzip')) {
+    const originalBody = await response.text();
+    const compressedBody = await gzip(Buffer.from(originalBody));
+    
+    return new NextResponse(compressedBody, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: {
+        ...response.headers,
+        'content-encoding': 'gzip',
+        'content-length': compressedBody.length.toString()
+      }
+    });
+  }
+  
+  return response;
+}
+</code></pre><p><strong>2. Parallel Processing:</strong>
+<pre><code class="language-typescript">// lib/aws/batchOperations.ts
+import { S3Client } from '@aws-sdk/client-s3';
+import pLimit from 'p-limit';</p><p>const limit = pLimit(5); // Limite à 5 opérations parallèles</p><p>export async function batchDeleteFiles(keys: string[]) {
+  const results = await Promise.allSettled(
+    keys.map(key => 
+      limit(() => deleteFile(key))
+    )
+  );
+  
+  const successful = results.filter(r => r.status === 'fulfilled');
+  const failed = results.filter(r => r.status === 'rejected');
+  
+  return {
+    successful: successful.length,
+    failed: failed.length,
+    errors: failed.map(f => f.reason)
+  };
+}
+</code></pre><h2>10.3 Optimisations Infrastructure</h2><h3>10.3.1 Kubernetes Resources</h3><p><strong>1. Resource Requests et Limits optimisés:</strong>
+<pre><code class="language-yaml">resources:
+  requests:
+    memory: "256Mi"  # Basé sur l'utilisation réelle moyenne
+    cpu: "250m"      # 1/4 CPU
+  limits:
+    memory: "1Gi"    # 4x les requests pour gérer les pics
+    cpu: "1000m"     # 1 CPU complet maximum
+</code></pre><p><strong>2. Horizontal Pod Autoscaler avec métriques custom:</strong>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aws-s3-manager-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aws-s3-manager
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "1000"
+</code></pre><h3>10.3.2 CDN et Caching</h3><p><strong>CloudFront Configuration:</strong>
+<pre><code class="language-terraform">resource "aws_cloudfront_distribution" "s3_distribution" {
+  origin {
+    domain_name = aws_s3_bucket.main.bucket_regional_domain_name
+    origin_id   = "S3-${aws_s3_bucket.main.id}"
+    
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+    }
+  }
+  
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+  
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "S3-${aws_s3_bucket.main.id}"
+    
+    forwarded_values {
+      query_string = true
+      headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
+      
+      cookies {
+        forward = "none"
+      }
+    }
+    
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+    compress               = true
+  }
+  
+  price_class = "PriceClass_100"
+  
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+  
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
+</code></pre><hr></p><h1>11. Monitoring et Observabilité</h1><h2>11.1 Stack de Monitoring</h2><h3>11.1.1 Métriques et Logs</h3><p><strong>1. Prometheus Configuration:</strong>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+    
+    scrape_configs:
+    - job_name: 'kubernetes-pods'
+      kubernetes_sd_configs:
+      - role: pod
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+    
+    - job_name: 'aws-s3-manager'
+      static_configs:
+      - targets: ['aws-s3-manager-service:3000']
+      metrics_path: '/api/metrics'
+</code></pre><p><strong>2. Application Metrics:</strong>
+<pre><code class="language-typescript">// lib/metrics/prometheus.ts
+import { Registry, Counter, Histogram, Gauge } from 'prom-client';</p><p>const register = new Registry();</p><p>// Métriques personnalisées
+export const httpRequestDuration = new Histogram({
+  name: 's3_manager_http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.1, 0.5, 1, 2, 5],
+  registers: [register]
+});</p><p>export const s3Operations = new Counter({
+  name: 's3_manager_operations_total',
+  help: 'Total number of S3 operations',
+  labelNames: ['operation', 'status'],
+  registers: [register]
+});</p><p>export const activeUsers = new Gauge({
+  name: 's3_manager_active_users',
+  help: 'Number of active users',
+  registers: [register]
+});</p><p>export const fileUploadSize = new Histogram({
+  name: 's3_manager_file_upload_size_bytes',
+  help: 'Size of uploaded files in bytes',
+  buckets: [1e3, 1e4, 1e5, 1e6, 1e7, 1e8], // 1KB to 100MB
+  registers: [register]
+});</p><p>// Middleware pour mesurer les requêtes
+export function metricsMiddleware(req: Request, res: Response, next: NextFunction) {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = (Date.now() - start) / 1000;
+    httpRequestDuration
+      .labels(req.method, req.route.path, res.statusCode.toString())
+      .observe(duration);
+  });
+  
+  next();
+}
+</code></pre><h3>11.1.2 Distributed Tracing</h3><p><strong>OpenTelemetry Integration:</strong>
+<pre><code class="language-typescript">// lib/tracing/setup.ts
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
+import { Resource } from '@opentelemetry/resources';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';</p><p>const jaegerExporter = new JaegerExporter({
+  endpoint: 'http://jaeger-collector:14268/api/traces',
+});</p><p>const sdk = new NodeSDK({
+  resource: new Resource({
+    [SemanticResourceAttributes.SERVICE_NAME]: 'aws-s3-manager',
+    [SemanticResourceAttributes.SERVICE_VERSION]: process.env.APP_VERSION || '1.0.0',
+  }),
+  traceExporter: jaegerExporter,
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-fs': {
+        enabled: false,
+      },
+    }),
+  ],
+});</p><p>sdk.start();
+</code></pre><h3>11.1.3 Dashboards et Alertes</h3><p><strong>Grafana Dashboard JSON:</strong>
+<pre><code class="language-json">{
+  "dashboard": {
+    "title": "AWS S3 Manager Dashboard",
+    "panels": [
+      {
+        "title": "Request Rate",
+        "targets": [
+          {
+            "expr": "rate(s3_manager_http_request_duration_seconds_count[5m])",
+            "legendFormat": "{{method}} {{route}}"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "rate(s3_manager_http_request_duration_seconds_count{status_code=~\"5..\"}[5m])",
+            "legendFormat": "5xx Errors"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "S3 Operations",
+        "targets": [
+          {
+            "expr": "rate(s3_manager_operations_total[5m])",
+            "legendFormat": "{{operation}} - {{status}}"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Active Users",
+        "targets": [
+          {
+            "expr": "s3_manager_active_users",
+            "legendFormat": "Active Users"
+          }
+        ],
+        "type": "stat"
+      }
+    ]
+  }
+}
+</code></pre><p><strong>AlertManager Rules:</strong>
+<pre><code class="language-yaml">groups:
+<ul>
+<li>name: aws-s3-manager</li>
+</ul>
+  interval: 30s
+  rules:
+  - alert: HighErrorRate
+    expr: rate(s3_manager_http_request_duration_seconds_count{status_code=~"5.."}[5m]) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+      team: platform
+    annotations:
+      summary: "High error rate detected"
+      description: "Error rate is above 5% for the last 5 minutes"
+      
+  - alert: S3OperationFailures
+    expr: rate(s3_manager_operations_total{status="error"}[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "S3 operations failing"
+      description: "S3 operation failure rate is above 10%"
+      
+  - alert: HighMemoryUsage
+    expr: container_memory_usage_bytes{pod=~"aws-s3-manager-.*"} / container_spec_memory_limit_bytes > 0.9
+    for: 5m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "High memory usage"
+      description: "Pod {{ $labels.pod }} memory usage is above 90%"
+</code></pre><hr></p><h1>12. Défis Rencontrés et Solutions</h1><h2>12.1 Défis Techniques</h2><h3>12.1.1 Gestion des Uploads Volumineux</h3><p><strong>Problème:</strong> Les uploads de fichiers > 100MB causaient des timeouts et des échecs.</p><p><strong>Solution Implementée:</strong>
+<pre><code class="language-typescript">// Multipart upload pour les gros fichiers
+import { 
+  CreateMultipartUploadCommand,
+  UploadPartCommand,
+  CompleteMultipartUploadCommand,
+  AbortMultipartUploadCommand
+} from '@aws-sdk/client-s3';</p><p>export async function uploadLargeFile(
+  file: File,
+  onProgress: (progress: number) => void
+) {
+  const CHUNK_SIZE = 10 <em> 1024 </em> 1024; // 10MB chunks
+  const chunks = Math.ceil(file.size / CHUNK_SIZE);
+  
+  // Initier l'upload multipart
+  const multipartUpload = await s3Client.send(
+    new CreateMultipartUploadCommand({
+      Bucket: BUCKET_NAME,
+      Key: file.name
+    })
+  );
+  
+  const uploadId = multipartUpload.UploadId;
+  const uploadPromises = [];
+  
+  try {
+    for (let i = 0; i < chunks; i++) {
+      const start = i * CHUNK_SIZE;
+      const end = Math.min(start + CHUNK_SIZE, file.size);
+      const chunk = file.slice(start, end);
+      
+      const uploadPromise = s3Client.send(
+        new UploadPartCommand({
+          Bucket: BUCKET_NAME,
+          Key: file.name,
+          UploadId: uploadId,
+          PartNumber: i + 1,
+          Body: chunk
+        })
+      ).then(data => {
+        const progress = ((i + 1) / chunks) * 100;
+        onProgress(progress);
+        return { ETag: data.ETag, PartNumber: i + 1 };
+      });
+      
+      uploadPromises.push(uploadPromise);
+    }
+    
+    const uploadedParts = await Promise.all(uploadPromises);
+    
+    // Compléter l'upload
+    await s3Client.send(
+      new CompleteMultipartUploadCommand({
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        UploadId: uploadId,
+        MultipartUpload: { Parts: uploadedParts }
+      })
+    );
+    
+  } catch (error) {
+    // Annuler l'upload en cas d'erreur
+    await s3Client.send(
+      new AbortMultipartUploadCommand({
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        UploadId: uploadId
+      })
+    );
+    throw error;
+  }
+}
+</code></pre><h3>12.1.2 Performance des Requêtes Base de Données</h3><p><strong>Problème:</strong> Requêtes lentes lors de la récupération de milliers de fichiers.</p><p><strong>Solution:</strong> Implémentation de la pagination côté serveur avec curseurs.</p><pre><code class="language-typescript">// Pagination avec curseur pour de meilleures performances
+export async function getFilesPaginated(
+  userId: string,
+  cursor?: string,
+  limit: number = 20
+) {
+  const query = <code>
+    SELECT 
+      file_id,
+      file_key,
+      file_size,
+      mime_type,
+      created_at,
+      COUNT(*) OVER() as total_count
+    FROM files
+    WHERE user_id = $1
+      AND ($2::timestamp IS NULL OR created_at < $2)
+    ORDER BY created_at DESC
+    LIMIT $3
+  </code>;
+  
+  const values = [userId, cursor || null, limit];
+  const result = await pool.query(query, values);
+  
+  const files = result.rows;
+  const hasMore = files.length === limit;
+  const nextCursor = hasMore ? files[files.length - 1].created_at : null;
+  
+  return {
+    files,
+    totalCount: files[0]?.total_count || 0,
+    hasMore,
+    nextCursor
+  };
+}
+</code></pre><h3>12.1.3 Gestion des Pics de Charge</h3><p><strong>Problème:</strong> L'application subissait des ralentissements lors de pics d'utilisation.</p><p><strong>Solution:</strong> Mise en place d'une architecture résiliente avec queue et cache.</p><pre><code class="language-typescript">// Circuit breaker pattern
+class CircuitBreaker {
+  private failures = 0;
+  private lastFailureTime = 0;
+  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
+  
+  constructor(
+    private threshold = 5,
+    private timeout = 60000 // 1 minute
+  ) {}
+  
+  async execute<T>(operation: () => Promise<T>): Promise<T> {
+    if (this.state === 'OPEN') {
+      if (Date.now() - this.lastFailureTime > this.timeout) {
+        this.state = 'HALF_OPEN';
+      } else {
+        throw new Error('Circuit breaker is OPEN');
+      }
+    }
+    
+    try {
+      const result = await operation();
+      this.onSuccess();
+      return result;
+    } catch (error) {
+      this.onFailure();
+      throw error;
+    }
+  }
+  
+  private onSuccess() {
+    this.failures = 0;
+    this.state = 'CLOSED';
+  }
+  
+  private onFailure() {
+    this.failures++;
+    this.lastFailureTime = Date.now();
+    
+    if (this.failures >= this.threshold) {
+      this.state = 'OPEN';
+    }
+  }
+}</p><p>// Utilisation avec Redis cache
+const s3Breaker = new CircuitBreaker();
+const redisClient = createClient({ url: process.env.REDIS_URL });</p><p>export async function listFilesWithFallback(userId: string) {
+  const cacheKey = <code>files:${userId}</code>;
+  
+  try {
+    // Essayer le cache d'abord
+    const cached = await redisClient.get(cacheKey);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+    
+    // Si pas de cache, utiliser S3 avec circuit breaker
+    const files = await s3Breaker.execute(async () => {
+      return await listS3Files(userId);
+    });
+    
+    // Mettre en cache pour 5 minutes
+    await redisClient.setex(cacheKey, 300, JSON.stringify(files));
+    
+    return files;
+  } catch (error) {
+    // Fallback vers la base de données locale
+    console.error('S3 list failed, falling back to database', error);
+    return await getFilesFromDatabase(userId);
+  }
+}
+</code></pre><h2>12.2 Défis Organisationnels</h2><h3>12.2.1 Coordination Multi-Équipes</h3><p><strong>Défi:</strong> Coordination entre les équipes dev, ops et sécurité.</p><p><strong>Solution:</strong> Mise en place de pratiques DevOps avec ownership partagé.</p><ul>
+<li>Daily standups cross-fonctionnels</li>
+<li>Documentation as Code</li>
+<li>Revues de code obligatoires</li>
+<li>Runbooks automatisés</li>
+</ul><h3>12.2.2 Migration Progressive</h3><p><strong>Défi:</strong> Migration de l'ancienne solution sans interruption de service.</p><p><strong>Solution:</strong> Stratégie de migration Blue/Green avec feature flags.</p><pre><code class="language-typescript">// Feature flags pour migration progressive
+import { FeatureFlag } from '@/lib/featureFlags';</p><p>const flags = new FeatureFlag({
+  newUploadFlow: {
+    enabled: process.env.ENABLE_NEW_UPLOAD === 'true',
+    rolloutPercentage: 50
+  },
+  enhancedNotifications: {
+    enabled: true,
+    rolloutPercentage: 100
+  }
+});</p><p>export async function handleUpload(req: Request) {
+  const userId = req.user.id;
+  
+  if (await flags.isEnabled('newUploadFlow', userId)) {
+    return newUploadHandler(req);
+  } else {
+    return legacyUploadHandler(req);
+  }
+}
+</code></pre><hr></p><h1>13. Résultats et Métriques</h1><h2>13.1 Métriques de Performance</h2><h3>13.1.1 Amélioration des Temps de Réponse</h3><p><strong>Avant vs Après:</strong>
+<ul>
+<li>Upload de fichier (10MB): 15s → 3s (-80%)</li>
+<li>Liste des fichiers (1000 items): 5s → 0.8s (-84%)</li>
+<li>Recherche de fichiers: 3s → 0.2s (-93%)</li>
+<li>Dashboard loading: 4s → 1.2s (-70%)</li>
+</ul><h3>13.1.2 Disponibilité et Fiabilité</h3><p><strong>SLA Atteints:</strong>
+<ul>
+<li>Disponibilité: 99.95% (objectif: 99.9%)</li>
+<li>MTTR (Mean Time To Recovery): 5 minutes</li>
+<li>MTBF (Mean Time Between Failures): 45 jours</li>
+<li>Error Rate: < 0.1%</li>
+</ul><h2>13.2 Métriques Business</h2><h3>13.2.1 Adoption Utilisateur</h3><pre><code class="language-">Mois 1: 50 utilisateurs actifs
+Mois 2: 200 utilisateurs actifs
+Mois 3: 500 utilisateurs actifs
+Mois 6: 1,200 utilisateurs actifs</p><p>Taux d'adoption: 95% des utilisateurs cibles
+</code></pre><h3>13.2.2 Impact Opérationnel</h3><ul>
+<li><strong>Réduction du temps de gestion:</strong> 40% de gain de productivité</li>
+<li><strong>Diminution des erreurs:</strong> 75% moins d'erreurs de manipulation</li>
+<li><strong>Satisfaction utilisateur:</strong> NPS de 72 (excellent)</li>
+<li><strong>Coût par utilisateur:</strong> Réduit de 60%</li>
+</ul><h2>13.3 Métriques Techniques</h2><h3>13.3.1 Infrastructure</h3><p><strong>Utilisation des Ressources:</strong>
+<pre><code class="language-yaml">Kubernetes Cluster:
+  - CPU Utilization: 45% average, 70% peak
+  - Memory Utilization: 60% average, 80% peak
+  - Pod Density: 15 pods/node
+  - Network Throughput: 100 Mbps average</p><p>AWS Resources:
+  - S3 Storage: 2.5 TB
+  - S3 Requests: 1M/month
+  - RDS Storage: 50 GB
+  - Data Transfer: 500 GB/month
+</code></pre><h3>13.3.2 CI/CD Pipeline</h3><p><strong>Pipeline Metrics:</strong>
+<ul>
+<li>Build Success Rate: 98%</li>
+<li>Average Build Time: 8 minutes</li>
+<li>Deployment Frequency: 15/week</li>
+<li>Lead Time for Changes: 2 hours</li>
+<li>MTTR for Pipeline: 10 minutes</li>
+</ul><hr></p><h1>14. Perspectives d'Évolution</h1><h2>14.1 Roadmap Technique</h2><h3>14.1.1 Court Terme (Q1 2025)</h3><ul>
+<li><strong>Migration vers Service Mesh (Istio)</strong></li>
+</ul>
+   - Amélioration de l'observabilité
+   - Gestion du trafic avancée
+   - Security policies centralisées</p><ul>
+<li><strong>Implémentation de GraphQL</strong></li>
+</ul>
+   - API plus flexible
+   - Réduction du over-fetching
+   - Subscriptions temps réel</p><ul>
+<li><strong>Edge Computing avec CloudFront Functions</strong></li>
+</ul>
+   - Validation côté edge
+   - Routing intelligent
+   - Réduction de latence</p><h3>14.1.2 Moyen Terme (Q2-Q3 2025)</h3><ul>
+<li><strong>Machine Learning Integration</strong></li>
+</ul>
+   - Classification automatique des fichiers
+   - Détection d'anomalies
+   - Prédiction d'utilisation du stockage</p><ul>
+<li><strong>Multi-Cloud Strategy</strong></li>
+</ul>
+   - Support Azure Blob Storage
+   - Google Cloud Storage integration
+   - Abstraction de stockage unifié</p><ul>
+<li><strong>Blockchain pour Audit Trail</strong></li>
+</ul>
+   - Immutabilité des logs
+   - Traçabilité complète
+   - Smart contracts pour workflows</p><h3>14.1.3 Long Terme (2026)</h3><ul>
+<li><strong>Serverless Migration</strong></li>
+</ul>
+   - AWS Lambda pour le processing
+   - Fargate pour les containers
+   - Réduction des coûts d'infrastructure</p><ul>
+<li><strong>AI-Powered Features</strong></li>
+</ul>
+   - Recherche sémantique
+   - Génération automatique de métadonnées
+   - Assistant virtuel intégré</p><h2>14.2 Améliorations Planifiées</h2><h3>14.2.1 Sécurité Renforcée</h3><pre><code class="language-typescript">// Future: Zero Trust Architecture
+interface ZeroTrustPolicy {
+  user: AuthenticatedUser;
+  device: DeviceInfo;
+  location: GeoLocation;
+  riskScore: number;
+  
+  evaluate(): Promise<AccessDecision>;
+}</p><p>class AdaptiveAuthentication {
+  async authenticate(request: AuthRequest): Promise<AuthResult> {
+    const riskScore = await this.calculateRiskScore(request);
+    
+    if (riskScore > 0.8) {
+      return this.requireMFA(request);
+    } else if (riskScore > 0.5) {
+      return this.requireAdditionalVerification(request);
+    }
+    
+    return this.standardAuth(request);
+  }
+}
+</code></pre><h3>14.2.2 Performance Optimization</h3><pre><code class="language-yaml"><h1>Future: eBPF-based monitoring</h1>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ebpf-monitor
+data:
+  monitor.c: |
+    #include <linux/bpf.h>
+    #include <linux/ptrace.h>
+    
+    SEC("kprobe/tcp_sendmsg")
+    int trace_tcp_sendmsg(struct pt_regs *ctx) {
+        // Trace network calls at kernel level
+        // Ultra-low overhead monitoring
+    }
+</code></pre><hr></p><h1>15. Conclusion</h1><h2>15.1 Bilan du Projet</h2><p>Ce projet représente une transformation majeure dans notre approche de la gestion des données cloud. L'implémentation réussie de cette solution a démontré plusieurs points clés :</p><h3>15.1.1 Réussites Techniques</h3><ul>
+<li><strong>Architecture Cloud-Native:</strong> L'adoption de Kubernetes et des principes cloud-native a permis une scalabilité et une résilience exceptionnelles.</li>
+</ul><ul>
+<li><strong>DevOps Excellence:</strong> Le pipeline CI/CD automatisé a réduit drastiquement le time-to-market tout en améliorant la qualité.</li>
+</ul><ul>
+<li><strong>Stack Technologique Moderne:</strong> L'utilisation de Next.js, AWS, et des meilleures pratiques actuelles garantit la pérennité de la solution.</li>
+</ul><h3>15.1.2 Impact Business</h3><p>L'impact sur l'organisation a dépassé les attentes initiales :
+<ul>
+<li>ROI positif atteint en 4 mois</li>
+<li>Adoption par 95% des utilisateurs cibles</li>
+<li>Réduction de 40% des coûts opérationnels</li>
+<li>Amélioration significative de la satisfaction utilisateur</li>
+</ul><h3>15.1.3 Leçons Apprises</h3><ul>
+<li><strong>L'importance de l'automatisation:</strong> Chaque processus manuel éliminé représente un gain en fiabilité et en efficacité.</li>
+</ul><ul>
+<li><strong>La valeur de l'observabilité:</strong> Les investissements dans le monitoring et le tracing ont payé lors de la résolution d'incidents.</li>
+</ul><ul>
+<li><strong>L'adoption progressive:</strong> Les feature flags et la migration progressive ont minimisé les risques.</li>
+</ul><h2>15.2 Remerciements</h2><p>Ce projet n'aurait pas été possible sans :
+<ul>
+<li>L'équipe de développement pour leur expertise technique</li>
+<li>L'équipe DevOps pour l'infrastructure robuste</li>
+<li>Les utilisateurs beta pour leurs retours constructifs</li>
+<li>Le management pour leur support continu</li>
+</ul><h2>15.3 Vision Future</h2><p>Ce projet pose les fondations pour une transformation digitale plus large. Les prochaines étapes incluront :
+<ul>
+<li>Extension à d'autres services cloud</li>
+<li>Intelligence artificielle pour l'automatisation</li>
+<li>Expansion internationale de la plateforme</li>
+</ul><p>La réussite de ce projet démontre notre capacité à livrer des solutions innovantes qui apportent une vraie valeur ajoutée à l'organisation.</p><hr></p><h1>16. Annexes</h1><h2>Annexe A: Configuration Détaillée</h2><h3>A.1 Configuration Docker Production</h3><pre><code class="language-dockerfile"><h1>Dockerfile optimisé multi-stage</h1>
+FROM node:18-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --only=production</p><p>FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build</p><p>FROM node:18-alpine AS runner
+WORKDIR /app</p><p>ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1</p><p>RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs</p><p>COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json</p><p>COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static</p><p>USER nextjs</p><p>EXPOSE 3000</p><p>ENV PORT 3000</p><p>CMD ["node", "server.js"]
+</code></pre><h3>A.2 Script de Déploiement Automatisé</h3><pre><code class="language-bash">#!/bin/bash
+<h1>deploy-production.sh</h1><p>set -euo pipefail</p><h1>Colors for output</h1>
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'</p><p>echo -e "${GREEN}Starting production deployment...${NC}"</p><h1>Check prerequisites</h1>
+command -v kubectl >/dev/null 2>&1 || { echo -e "${RED}kubectl is required but not installed.${NC}" >&2; exit 1; }
+command -v docker >/dev/null 2>&1 || { echo -e "${RED}docker is required but not installed.${NC}" >&2; exit 1; }</p><h1>Variables</h1>
+NAMESPACE="aws-s3-manager"
+APP_NAME="aws-s3-manager"
+REGISTRY="registry.example.com"
+VERSION=$(git describe --tags --always)</p><h1>Build and push Docker image</h1>
+echo -e "${YELLOW}Building Docker image...${NC}"
+docker build -t ${REGISTRY}/${APP_NAME}:${VERSION} .
+docker tag ${REGISTRY}/${APP_NAME}:${VERSION} ${REGISTRY}/${APP_NAME}:latest</p><p>echo -e "${YELLOW}Pushing Docker image...${NC}"
+docker push ${REGISTRY}/${APP_NAME}:${VERSION}
+docker push ${REGISTRY}/${APP_NAME}:latest</p><h1>Update Kubernetes deployment</h1>
+echo -e "${YELLOW}Updating Kubernetes deployment...${NC}"
+kubectl set image deployment/${APP_NAME} app=${REGISTRY}/${APP_NAME}:${VERSION} -n ${NAMESPACE}</p><h1>Wait for rollout to complete</h1>
+echo -e "${YELLOW}Waiting for rollout to complete...${NC}"
+kubectl rollout status deployment/${APP_NAME} -n ${NAMESPACE}</p><h1>Run smoke tests</h1>
+echo -e "${YELLOW}Running smoke tests...${NC}"
+./scripts/smoke-tests.sh</p><p>echo -e "${GREEN}Deployment completed successfully!${NC}"
+</code></pre><h2>Annexe B: Métriques de Performance Détaillées</h2><h3>B.1 Benchmarks de Performance</h3><pre><code class="language-">Load Test Results (using K6):
+=================================
+Scenario: 1000 concurrent users
+Duration: 30 minutes
+Target: https://s3-manager.example.com</p><p>Results:
+--------
+✓ http_req_duration..............: avg=156.23ms min=45ms med=142ms max=1.2s p(95)=289ms p(99)=456ms
+✓ http_req_failed................: 0.02%
+✓ http_req_receiving.............: avg=2.34ms min=0.5ms med=2.1ms max=15ms
+✓ http_req_sending...............: avg=0.89ms min=0.1ms med=0.8ms max=5ms
+✓ http_reqs......................: 384,291 total
+✓ vus............................: 1000
+✓ vus_max........................: 1000</p><p>File Upload Performance:
+-----------------------
+1MB file:    avg=0.8s  p(95)=1.2s  p(99)=1.5s
+10MB file:   avg=3.2s  p(95)=4.5s  p(99)=5.8s
+100MB file:  avg=28s   p(95)=35s   p(99)=42s
+</code></pre><h3>B.2 Analyse des Coûts AWS</h3><pre><code class="language-">Monthly AWS Cost Breakdown:
+==========================
+Service               | Usage                  | Cost (USD)
+---------------------|------------------------|------------
+EC2 (K8s nodes)      | 3x t3.large           | $149.76
+RDS PostgreSQL       | db.t3.micro Multi-AZ  | $48.96
+S3 Storage           | 2.5TB + requests      | $57.50
+Data Transfer        | 500GB                 | $45.00
+SNS/SQS             | 1M messages           | $0.50
+CloudWatch          | Logs + Metrics        | $25.00
+Load Balancer       | Application LB        | $22.50
+---------------------|------------------------|------------
+Total Monthly Cost   |                       | $349.22</p><p>Cost per User: $0.29/month (1200 active users)
+</code></pre><h2>Annexe C: Documentation API</h2><h3>C.1 API Endpoints</h3><pre><code class="language-typescript">// API Documentation
+interface APIEndpoints {
+  // Authentication
+  'POST /api/auth/login': {
+    body: { email: string; password: string };
+    response: { token: string; user: User };
+  };
+  
+  // File Operations
+  'GET /api/list': {
+    query: { prefix?: string; limit?: number; cursor?: string };
+    response: { files: S3File[]; nextCursor?: string };
+  };
+  
+  'POST /api/upload': {
+    body: FormData; // file + metadata
+    response: { file: S3File; uploadId: string };
+  };
+  
+  'DELETE /api/delete/:key': {
+    params: { key: string };
+    response: { success: boolean };
+  };
+  
+  // Notifications
+  'GET /api/notifications': {
+    query: { limit?: number; since?: string };
+    response: { notifications: Notification[] };
+  };
+  
+  'WS /api/notifications/ws': {
+    message: NotificationEvent;
+  };
+}
+</code></pre><h2>Annexe D: Procédures d'Urgence</h2><h3>D.1 Runbook - Incident Response</h3><pre><code class="language-markdown"><h1>Incident Response Runbook</h1><h2>1. Identification</h2>
+<ul>
+<li>Check monitoring dashboards</li>
+<li>Verify alerts in Slack/PagerDuty</li>
+<li>Assess severity (P1-P4)</li>
+</ul><h2>2. Communication</h2>
+<ul>
+<li>P1/P2: Create incident channel #incident-YYYY-MM-DD</li>
+<li>Notify stakeholders via status page</li>
+<li>Assign incident commander</li>
+</ul><h2>3. Diagnosis</h2>
+</code></pre>bash
+<h1>Check application health</h1>
+kubectl get pods -n aws-s3-manager
+kubectl describe pod <pod-name> -n aws-s3-manager
+kubectl logs <pod-name> -n aws-s3-manager --tail=100</p><h1>Check AWS services</h1>
+aws s3api list-buckets
+aws sns list-topics
+aws sqs list-queues</p><h1>Database health</h1>
+kubectl exec -it postgres-0 -n aws-s3-manager -- psql -U postgres -c "SELECT pg_is_in_recovery();"
+<pre><code class="language-">
+<h2>4. Mitigation</h2>
+<ul>
+<li>Scale up if needed: <code>kubectl scale deployment aws-s3-manager --replicas=5</code></li>
+<li>Enable circuit breakers</li>
+<li>Redirect traffic if necessary</li>
+</ul><h2>5. Resolution</h2>
+<ul>
+<li>Apply fix</li>
+<li>Verify in staging first</li>
+<li>Deploy to production</li>
+<li>Monitor for 30 minutes</li>
+</ul><h2>6. Post-Mortem</h2>
+<ul>
+<li>Schedule within 48 hours</li>
+<li>Document timeline</li>
+<li>Identify root cause</li>
+<li>Create action items</li>
+</ul>
+</code></pre><hr></p><p><strong>Fin du Rapport</strong></p><p><strong>Date de finalisation:</strong> Décembre 2024  
+<strong>Nombre de pages:</strong> 30  
+<strong>Auteur:</strong> Équipe d'Ingénierie DevOps</p>
+    
+    <script>
+        // Add print instructions
+        if (window.location.protocol === 'file:') {
+            const printNote = document.createElement('div');
+            printNote.style.cssText = 'position: fixed; top: 10px; right: 10px; background: #3f51b5; color: white; padding: 10px 20px; border-radius: 5px; font-size: 14px; z-index: 1000; cursor: pointer;';
+            printNote.innerHTML = 'Cliquez ici ou Ctrl+P pour imprimer en PDF';
+            printNote.onclick = () => window.print();
+            document.body.appendChild(printNote);
+        }
+    </script>
+</body>
+</html>

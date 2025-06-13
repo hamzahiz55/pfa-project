@@ -1,0 +1,69 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aws-s3-manager-staging
+
+bases:
+  - ../../
+
+namePrefix: staging-
+
+commonLabels:
+  environment: staging
+
+patchesStrategicMerge:
+  - app-service-patch.yaml
+  - hpa-patch.yaml
+  - |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: aws-s3-manager-app
+      namespace: aws-s3-manager-staging
+    spec:
+      replicas: 2
+      template:
+        spec:
+          containers:
+          - name: aws-s3-manager
+            env:
+            - name: NEXT_PUBLIC_ENV
+              value: "staging"
+            - name: NODE_ENV
+              value: "staging"
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+
+  - |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: aws-s3-manager-config
+      namespace: aws-s3-manager-staging
+    data:
+      NEXT_PUBLIC_ENV: "staging"
+      NODE_ENV: "staging"
+
+  - |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: aws-s3-manager-ingress
+      namespace: aws-s3-manager-staging
+    spec:
+      rules:
+      - host: staging.aws-s3-manager.example.com
+        http:
+          paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: staging-aws-s3-manager-service
+                port:
+                  number: 80
