@@ -19,7 +19,7 @@ resources:
 
 images:
   - name: aws-s3-manager
-    newName: your-registry.com/aws-s3-manager
+    newName: aws-s3-manager
     newTag: latest
 
 commonLabels:
