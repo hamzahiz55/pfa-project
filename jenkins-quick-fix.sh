@@ -28,7 +28,7 @@ java -jar /tmp/jenkins-cli.jar -s http://localhost:8080 -auth admin:admin create
 echo "✅ Credential created. Now testing repository access..."
 
 # Test if we can access the repository
-if curl -H "Authorization: token YOUR_GITHUB_TOKEN_HERE" -s https://api.github.com/repos/hamzahizi55/aws-s3-manager-new > /dev/null; then
+if curl -H "Authorization: token YOUR_GITHUB_TOKEN_HERE" -s https://api.github.com/repos/hamzahiz55/pfa-project > /dev/null; then
     echo "✅ Repository is accessible"
 else
     echo "❌ Repository access failed - check if repo exists and is public"
@@ -37,7 +37,7 @@ fi
 echo ""
 echo "📋 Manual Steps Still Needed:"
 echo "1. Go to: http://localhost:8080/job/aws-s3-manager-pipeline/configure"
-echo "2. Change Repository URL to: https://github.com/hamzahizi55/aws-s3-manager-new.git"
+echo "2. Change Repository URL to: https://github.com/hamzahiz55/pfa-project.git"
 echo "3. Select Credentials: github-token-new"
 echo "4. Change Branch to: */master"
 echo "5. Save and Build Now"

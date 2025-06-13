@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/tahavv/aws-s3-manager.git
-    targetRevision: new-new-branch
+    repoURL: https://github.com/hamzahiz55/pfa-project.git
+    targetRevision: master
     path: k8s
   destination:
     server: https://kubernetes.default.svc
