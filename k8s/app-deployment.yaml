@@ -134,17 +134,3 @@ spec:
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 30
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: aws-s3-manager-service
-  namespace: aws-s3-manager
-spec:
-  selector:
-    app: aws-s3-manager-app
-  ports:
-  - port: 80
-    targetPort: 3000
-    protocol: TCP
-  type: ClusterIP
